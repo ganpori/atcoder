@@ -1,14 +1,14 @@
 def A():
-    s = input()
+    n = int(input())
+    list_a = list(map(int, input().split()))
+    value = list_a[0]
 
-    is_zero_even_all = True
-
-    for i, value in enumerate(s):
-        if (i + 1) % 2 == 0:
-            if value != "0":
-                is_zero_even_all = False
-
-    if is_zero_even_all:
+    is_same = True
+    for a in list_a:
+        if a != value:
+            is_same = False
+            break
+    if is_same:
         print("Yes")
     else:
         print("No")
