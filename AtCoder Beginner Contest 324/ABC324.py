@@ -15,5 +15,26 @@ def A():
     return
 
 
+def B():
+    n = int(input())
+    while True:  # 3のループ
+        q, mod = divmod(n, 3)
+        if mod == 0:
+            n = q
+        else:  # nの更新はしない
+            break
+    while True:  # 2のループ
+        q, mod = divmod(n, 2)
+        if mod == 0:
+            n = q
+        else:  # nの更新はしない
+            break
+    if n == 1:
+        print("Yes")
+    else:
+        print("No")
+    return
+
+
 if __name__ == "__main__":
-    A()
+    B()
