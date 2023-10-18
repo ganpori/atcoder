@@ -21,21 +21,19 @@ fn c() {
     let mut list_true: Vec<usize> = Vec::new();
     for (j, s) in list_s.iter().enumerate() {
         let len_s = s.len();
+        if (len_s as i32 - len_t as i32).abs() > 1 {
+            continue;
+        }
         if len_s == len_t {
             for i in 0..len_t {
-                let new_s = format!("{}{}", &s[..i], &s[i + 1..]); // ascii文字列ならbyte数と文字数が一致してるのでこれでよい
-                let new_t = format!("{}{}", &t[..i], &t[i + 1..]);
-                if new_s == new_t {
+                if &s[..i] == &t[..i] && &s[i + 1..] == &t[i + 1..] {
                     list_true.push(j + 1);
                     break;
                 }
             }
         } else if len_s < len_t {
             for i in 0..len_t {
-                let new_t = format!("{}{}", &t[..i], &t[i + 1..]);
-                // println!("{}", new_t);
-                // println!("{}", &new_t);
-                if new_t == *s {
+                if &s[..i] == &t[..i] && &s[i..] == &t[i + 1..] {
                     // sは&String型
                     // ポインタ同士だけど値比較できてるんか？？？
                     list_true.push(j + 1);
@@ -44,8 +42,7 @@ fn c() {
             }
         } else if len_s > len_t {
             for i in 0..len_s {
-                let new_s = format!("{}{}", &s[..i], &s[i + 1..]);
-                if new_s == t {
+                if &s[..i] == &t[..i] && &s[i + 1..] == &t[i..] {
                     list_true.push(j + 1);
                     break;
                 }
