@@ -52,9 +52,7 @@ fn c() {
     println!("{}", list_true.len());
     let mut out_str = String::new();
     for value in &list_true {
-        out_str.push_str(&value.to_string());
-        out_str.push_str(" ");
-        continue;
+        out_str.push_str(&(value.to_string() + " "));
     }
     println!("{}", out_str);
 }
