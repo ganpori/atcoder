@@ -17,8 +17,10 @@ fn c() {
         list_s:[String;n]
     }
 
+    let mut count: u32 = 0;
+    let mut out_str = String::new();
+
     let len_t = t.len();
-    let mut list_true: Vec<usize> = Vec::new();
     for (j, s) in list_s.iter().enumerate() {
         let len_s = s.len();
         if (len_s as i32 - len_t as i32).abs() > 1 {
@@ -27,7 +29,8 @@ fn c() {
         if len_s == len_t {
             for i in 0..len_t {
                 if &s[..i] == &t[..i] && &s[i + 1..] == &t[i + 1..] {
-                    list_true.push(j + 1);
+                    out_str.push_str(&((j + 1).to_string() + " "));
+                    count += 1;
                     break;
                 }
             }
@@ -36,23 +39,21 @@ fn c() {
                 if &s[..i] == &t[..i] && &s[i..] == &t[i + 1..] {
                     // sは&String型
                     // ポインタ同士だけど値比較できてるんか？？？
-                    list_true.push(j + 1);
+                    out_str.push_str(&((j + 1).to_string() + " "));
+                    count += 1;
                     break;
                 }
             }
         } else if len_s > len_t {
             for i in 0..len_s {
                 if &s[..i] == &t[..i] && &s[i + 1..] == &t[i..] {
-                    list_true.push(j + 1);
+                    out_str.push_str(&((j + 1).to_string() + " "));
+                    count += 1;
                     break;
                 }
             }
         }
     }
-    println!("{}", list_true.len());
-    let mut out_str = String::new();
-    for value in &list_true {
-        out_str.push_str(&(value.to_string() + " "));
-    }
+    println!("{}", count);
     println!("{}", out_str);
 }
