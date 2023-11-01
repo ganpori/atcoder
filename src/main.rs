@@ -1,6 +1,6 @@
 use proconio::input;
 
-use atcoder::modules::tessoku;
+mod tessoku;
 
 // ここを参考にとく
 // https://shiganaise.com/rust-abs/
@@ -9,7 +9,7 @@ use atcoder::modules::tessoku;
 // https://atcoder.jp/contests/dp
 
 fn main() {
-    c()
+    tessoku::binary_search::a11();
 }
 
 fn c() {
