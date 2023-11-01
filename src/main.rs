@@ -1,5 +1,7 @@
 use proconio::input;
 
+use atcoder::modules::tessoku;
+
 // ここを参考にとく
 // https://shiganaise.com/rust-abs/
 // https://atcoder.jp/contests/abs
