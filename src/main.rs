@@ -1,6 +1,6 @@
-use proconio::input;
-
 mod tessoku;
+
+use proconio::input;
 
 // ここを参考にとく
 // https://shiganaise.com/rust-abs/
