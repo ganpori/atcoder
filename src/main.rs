@@ -1,3 +1,4 @@
+// https://atcoder.jp/contests/tessoku-book
 mod tessoku;
 
 use proconio::input;
@@ -9,7 +10,8 @@ use proconio::input;
 // https://atcoder.jp/contests/dp
 
 fn main() {
-    tessoku::binary_search::a11();
+    tessoku::binary_search::a12();
+    // a12();
 }
 
 fn c() {

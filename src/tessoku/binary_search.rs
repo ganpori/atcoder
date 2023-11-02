@@ -14,7 +14,6 @@ pub fn a11() {
     let result = a.binary_search(&x);
     let index = result.unwrap();
     println!("{}", index + 1);
-}
     // let mut index_max = a.len() - 1;
     // let mut index_min = 0usize;
     // let mut half_index;
@@ -29,4 +28,38 @@ pub fn a11() {
     //         break;
     //     }
     // }
+}
+
+pub fn a12() {
+    input! {
+        n:usize,
+        k:usize,
+        mut a:[usize;n]
+    }
+    a.sort();
+
+    let mut max_time = a[0] * k;
+    let mut min_time = 1;
+
+    loop {
+        let mut time_candidate = (max_time + min_time) / 2;
+        let mut num_print = 0;
+        for ai in a.iter() {
+            num_print += time_candidate / ai;
+        }
+
+        if num_print >= k {
+            // num_print==kでも同じnum_printのところが何秒か持続する。そのうちの最小を探すためにmaxを小さくしていく
+            max_time = time_candidate; // maxtimeもずらすけどcandidateより小さくすると間違う可能性あり
+            if max_time == min_time {
+                println!("{}", time_candidate);
+                break;
+            }
+        } else if num_print < k {
+            min_time = time_candidate + 1;
+        }
+        // println!("num_print:{}", num_print);
+        // println!("time_candidate:{}", time_candidate);
+        // println!("num_print:{}", num_print);
+    }
 }
