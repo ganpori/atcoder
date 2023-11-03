@@ -1,17 +1,18 @@
-// https://atcoder.jp/contests/tessoku-book
-mod tessoku;
-
-use proconio::input;
-
 // ここを参考にとく
 // https://shiganaise.com/rust-abs/
 // https://atcoder.jp/contests/abs
 // https://qiita.com/drken/items/dc53c683d6de8aeacf5a
 // https://atcoder.jp/contests/dp
 
+mod abc;
+mod tessoku;
+// https://atcoder.jp/contests/tessoku-book
+
+use proconio::input;
+
 fn main() {
-    tessoku::binary_search::a12();
-    // a12();
+    tessoku::binary_search::a13();
+    // a13();
 }
 
 fn c() {
