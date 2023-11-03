@@ -63,3 +63,34 @@ pub fn a12() {
         // println!("num_print:{}", num_print);
     }
 }
+
+pub fn a13() {
+    input! {
+        n:usize,
+        k:usize,
+        a:[usize;n]
+    }
+
+    let mut r = vec![0; n]; //右端のindex, 右端がわかってればその間は計算する必要がなくなるから。
+    for (i, ai) in a[..a.len() - 1].iter().enumerate() {
+        // println!("{}", ai);
+        if (i == 0) {
+        } else {
+            r[i] = r[i - 1];
+        }
+        for aj in &a[r[i] + 1..] {
+            // println!("aj:{}", aj);
+            if k >= (aj - ai) {
+                r[i] += 1;
+            } else {
+                break;
+            }
+        }
+        // println!("r:{:?}", r);
+    }
+    let mut count = 0;
+    for (i, ri) in r[..r.len() - 1].iter().enumerate() {
+        count += ri - i;
+    }
+    println!("{}", count);
+}
