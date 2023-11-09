@@ -57,3 +57,36 @@ fn dfs(pos: usize, vec_visited: &mut Vec<bool>, adjacency_list: &Vec<Vec<usize>>
         }
     }
 }
+
+pub fn a63() {
+    use std::collections::VecDeque;
+    input! {
+        n:usize,
+        m:usize,
+        vec_edge:[[usize;2];m]
+    }
+
+    let mut adjacency_list = vec![Vec::<usize>::new(); n];
+    for edge in vec_edge.iter() {
+        adjacency_list[edge[0] - 1].push(edge[1] - 1);
+        adjacency_list[edge[1] - 1].push(edge[0] - 1);
+    }
+    let mut dist = vec![-1; n];
+    let mut queue = VecDeque::new();
+    let mut pos = 0;
+    dist[pos] = 0;
+    queue.push_back(0);
+
+    while queue.len() > 0 {
+        pos = queue.pop_front().unwrap();
+        for to in &adjacency_list[pos] {
+            if dist[*to] == -1 {
+                queue.push_back(*to);
+                dist[*to] = dist[pos] + 1;
+            }
+        }
+    }
+    for val in dist.iter() {
+        println!("{}", val);
+    }
+}
