@@ -9,6 +9,7 @@ mod tessoku;
 // https://atcoder.jp/contests/tessoku-book
 
 use proconio::input;
+#[allow(dead_code)]
 
 fn main() {
     tessoku::binary_search::a13();
