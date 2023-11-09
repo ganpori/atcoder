@@ -74,7 +74,7 @@ pub fn a13() {
     let mut r = vec![0; n]; //右端のindex, 右端がわかってればその間は計算する必要がなくなるから。
     for (i, ai) in a[..a.len() - 1].iter().enumerate() {
         // println!("{}", ai);
-        if (i == 0) {
+        if i == 0 {
         } else {
             r[i] = r[i - 1];
         }
