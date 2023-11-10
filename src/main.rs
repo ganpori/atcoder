@@ -11,6 +11,7 @@ mod tessoku;
 use proconio::input;
 
 fn main() {
-    tessoku::binary_search::a13();
+    // tessoku::binary_search::a13();
+    abc::abc325::c();
     // a13();
 }
