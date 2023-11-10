@@ -1,17 +1,25 @@
 use proconio::input;
 
 pub fn a() {
-    input! {n:usize,}
+    input! {
+      n:usize,
+    }
 }
 
 pub fn b() {
-    input! {n:usize,}
+    input! {
+      n:usize,
+    }
 }
 
 pub fn c() {
-    input! {n:usize,}
+    input! {
+      n:usize,
+    }
 }
 
 pub fn d() {
-    input! {n:usize,}
+    input! {
+      n:usize,
+    }
 }
