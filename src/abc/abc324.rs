@@ -61,3 +61,30 @@ pub fn c() {
     println!("{}", count);
     println!("{}", out_str);
 }
+
+pub fn d() {
+    use proconio::marker::Chars;
+    input! {
+      n:usize,
+      mut s:Chars,
+    }
+    s.sort();
+
+    let mut count = 0;
+    let max_x: usize = (10usize.pow(n as u32) as f64).sqrt() as usize;
+    for i in 0..=max_x {
+        let num_candidate = i * i;
+        let str_candidate = num_candidate.to_string();
+        let mut s_candidate = vec!['0'; s.len()];
+        for (j, nth_val) in str_candidate.char_indices() {
+            if j < s.len() {
+                s_candidate[j] = nth_val;
+            }
+        }
+        s_candidate.sort();
+        if s == s_candidate {
+            count += 1;
+        }
+    }
+    println!("{}", count);
+}
