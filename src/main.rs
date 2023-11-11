@@ -4,8 +4,8 @@
 // https://qiita.com/drken/items/dc53c683d6de8aeacf5a
 // https://atcoder.jp/contests/dp
 
-mod abc;
-mod tessoku;
+// mod abc;
+// mod tessoku;
 // https://atcoder.jp/contests/tessoku-book
 
 use proconio::input;
