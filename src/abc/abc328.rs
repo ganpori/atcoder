@@ -52,3 +52,41 @@ pub fn b() {
     }
     println!("{}", count);
 }
+
+// rustのvecはそもそもがスタック構造になってる
+// stringやvecのまま中央の値を削除したりするとほかの要素のメモリ番地をずらす必要があるためN要素あるならO(N)ほどかかってしまう
+// 中央の値をずらすをN回やると演算量はO(N^2)
+// popやpushはO(1)で演算できるからそれだけをN解で済むならO(N)ぐらいですませられる
+// vecでi番目を参照するとかの計算コストはO(1)ぐらいっぽい
+// ただStringでそのまま参照しようとするとstr.chars().nth(i)とかになってcharsでイテレータをN回つくることになる
+//　そんな場合はchars().collect_vec()でvecにしてしまってvecで参照すると早い。
+pub fn d() {
+    input! {
+      s:String
+    }
+
+    if s.len() <= 2 {
+        println!("{}", s);
+        return;
+    } else {
+        let mut vec_s = Vec::<char>::new();
+        for s_char in s.chars() {
+            vec_s.push(s_char);
+            if vec_s.len() <= 2 {
+                continue;
+            } else {
+                if vec_s[vec_s.len() - 3] == 'A'
+                    && vec_s[vec_s.len() - 2] == 'B'
+                    && vec_s[vec_s.len() - 1] == 'C'
+                {
+                    vec_s.pop();
+                    vec_s.pop();
+                    vec_s.pop();
+                }
+            }
+        }
+        for char_s in vec_s {
+            print!("{}", char_s);
+        }
+    }
+}
