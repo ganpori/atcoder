@@ -18,3 +18,24 @@ pub fn a() {
     }
     println!("Yes");
 }
+
+pub fn b() {
+    input! {
+      n:usize,
+      x:usize,
+      vec_a:[usize;n-1]
+    }
+    let max_a = vec_a.iter().max().unwrap();
+    let min_a = vec_a.iter().min().unwrap();
+    let sum_a = vec_a.iter().sum::<usize>();
+    if sum_a - min_a < x {
+        // 最高得点超えられない
+        println!("-1");
+    } else if x <= sum_a - max_a {
+        //最低得点でも超えちゃう
+        println!("0");
+    } else {
+        let value = x - (sum_a - max_a - min_a);
+        println!("{}", value);
+    }
+}
