@@ -39,3 +39,45 @@ pub fn b() {
         println!("{}", value);
     }
 }
+
+// x << y	x を y ビット左シフト
+// x >> y	x を y ビット右シフト
+// 1 << n は2^nを意味する。n+1桁の0b1000....0になる。型は普通のi32とか。
+// 各数字を一つずつつかうか、という問題に置き換えられる。順番は一つだから。
+pub fn c() {
+    input! {
+       k:usize
+    }
+
+    let list_str = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    let n = list_str.len() as u32;
+    let mut list_num_usize = Vec::<usize>::new();
+    for bit_expression in 1..1usize.rotate_left(n) {
+        let mut list_num = Vec::<&str>::new();
+        for i in 0..n {
+            //シフトする桁数のループ
+            // println!("bit_expression = {}", bit_expression);
+            // println!("1 << i = {}", 1 << i);
+            // println!("bit_expression & 1 << i = {}", (bit_expression & (1 << i)));
+            // i bit分シフトさせてその桁の01をチェックする
+            if (bit_expression & (1 << i)) >= 1 {
+                list_num.push(list_str[i as usize])
+            }
+        }
+        if list_num.len() >= 1 {
+            list_num.reverse();
+            // println!("{:?}", list_num);
+            let num_str = list_num.concat();
+            let number: usize = num_str.parse().unwrap();
+            if number != 0 {
+                list_num_usize.push(number);
+            }
+        }
+    }
+    list_num_usize.sort();
+    for (i, value) in list_num_usize.iter().enumerate() {
+        if i + 1 == k {
+            println!("{}", value);
+        }
+    }
+}
