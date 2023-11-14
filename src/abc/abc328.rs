@@ -90,3 +90,57 @@ pub fn d() {
         }
     }
 }
+
+// leftとrightは中間の+-1に設定するみたい。それで間に抜けがないかはどうやって判断するんだろう。
+// 二分探索の場合分けは<,>,=を分けてやったほうがわかりやすい。
+// 二分探索はターゲットの値を与えてそれに対して境界を取得するようにするほうがわかりよい
+// 二分探索の無限ループでleft < rigetという条件を入れることで適当なタイミングでループ終わる
+pub fn d() {
+    input! {
+      n:usize,
+      m:usize,
+      p:usize,
+      mut list_a:[usize;n],
+      mut list_b:[usize;m],
+    }
+    list_a.sort();
+    list_b.sort();
+    let mut cumulative_b: Vec<usize> = vec![0; m];
+    cumulative_b[0] = list_b[0];
+    for i in 1..m {
+        cumulative_b[i] = cumulative_b[i - 1] + list_b[i];
+    }
+
+    let mut sum_price = 0;
+    for a in &list_a {
+        let mut left_index: usize = 0;
+        let mut right_index: usize = list_b.len() - 1;
+        let mut k_dash = (right_index + left_index) / 2;
+        if *a >= p {
+            k_dash = 0;
+        } else {
+            let target_value = p - a;
+            while left_index < right_index {
+                // target_valueより大きくなる最小のindexを返す
+                let candidate_value = list_b[k_dash];
+                if candidate_value > target_value {
+                    right_index = k_dash;
+                } else if candidate_value < target_value {
+                    left_index = k_dash + 1;
+                } else if candidate_value == target_value {
+                    //同じの場合その値の一番左のindexに行きたい。=時の処理で終端の微妙な位置がかわる
+                    right_index = k_dash;
+                }
+                k_dash = (right_index + left_index) / 2;
+            }
+        }
+        if k_dash == m - 1 && a + list_b[k_dash] <= p {
+            sum_price += m * a + cumulative_b[m - 1];
+        } else if k_dash == 0 {
+            sum_price += m * p;
+        } else {
+            sum_price += k_dash * a + (m - k_dash) * p + cumulative_b[k_dash - 1];
+        }
+    }
+    println!("{}", sum_price);
+}
