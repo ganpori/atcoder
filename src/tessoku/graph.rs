@@ -89,4 +89,62 @@ pub fn a63() {
     for val in dist.iter() {
         println!("{}", val);
     }
+    
+// ダイクストラ法で距離付きのグラフを解く
+// 幅優先探索と考え方は同じ。
+// スタート位置からの距離を暫定距離を使って更新していく。
+// 明らかな最小距離のノードから暫定距離を真の距離に確定させていく。
+// 明らかな最小距離のノードを効率よく選ぶためにpriority queueを使う。
+fn a64() {
+    use std::collections::BinaryHeap;
+
+    input! {
+        n:usize,
+        m:usize,
+        vec_edge:[[usize;3];m]
+    }
+
+    let max_dist: usize = m * 10_001;
+    let mut adjacent_list = vec![vec![]; n];
+    for i in 0..m {
+        let a2b_array = [vec_edge[i][1] - 1, vec_edge[i][2]];
+        adjacent_list[vec_edge[i][0] - 1].push(a2b_array);
+        let b2a_array = [vec_edge[i][0] - 1, vec_edge[i][2]];
+        adjacent_list[vec_edge[i][1] - 1].push(b2a_array);
+    }
+    // println!("{:?}", adjacent_list);
+
+    let mut kakutei = vec![false; n];
+    let mut current_dist = vec![max_dist; n];
+
+    let mut queue = BinaryHeap::new();
+    current_dist[0] = 0;
+    queue.push([-1 * current_dist[0] as i32, 0]); //値の大きいものから取り出されるので-1しておく。中身がvecならvecの一番左を参照されるっぽい
+    while queue.len() > 0 {
+        // 次に確定する頂点posを決める
+        let [_, pos] = queue.pop().unwrap();
+
+        if kakutei[pos as usize] == true {
+            continue; // posへの辺が何個もあるがすでにposへの最小のdistが定まっている場合
+        }
+
+        //posと隣接する頂点のcurrentの値を更新
+        kakutei[pos as usize] = true;
+        for [next_node, weight] in &adjacent_list[pos as usize] {
+            current_dist[*next_node] = std::cmp::min(
+                current_dist[pos as usize] + *weight,
+                current_dist[*next_node],
+            );
+            if kakutei[*next_node] == false {
+                queue.push([-1 * current_dist[*next_node] as i32, *next_node as i32]);
+            }
+        }
+    }
+    for i in 0..n {
+        if current_dist[i] != max_dist {
+            println!("{}", current_dist[i]);
+        } else {
+            println!("-1");
+        }
+    }
 }
