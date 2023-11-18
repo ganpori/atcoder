@@ -75,3 +75,26 @@ pub fn a() {
     }
     print!("{}", s[s.len() - 1]);
 }
+
+// 200000=2*10^5なので毎回最大のindexを探すとO(N^2)でTLE
+// 新しく票を入れられたとこと前回の値だけ比較すればよいのでそしたらO(N)
+fn d() {
+    input! {
+        n:usize,
+        m:usize,
+        a:[usize;m]
+    }
+    let mut vec_num_notes = vec![0; n];
+    let mut old_argmax: usize = 0;
+    let mut old_max_num: usize = 0;
+    for value in a {
+        vec_num_notes[value - 1] += 1;
+        if old_max_num < vec_num_notes[value - 1] {
+            old_argmax = value - 1;
+            old_max_num = vec_num_notes[value - 1];
+        } else if old_max_num == vec_num_notes[value - 1] {
+            old_argmax = std::cmp::min(old_argmax, value - 1);
+        }
+        println!("{}", old_argmax + 1);
+    }
+}
