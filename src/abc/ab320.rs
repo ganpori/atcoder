@@ -89,3 +89,53 @@ fn solve(s: &Vec<Vec<char>>, target_char: char, perm: Vec<usize>) -> usize {
     }
     3 * m + 1
 }
+
+// 幅優先探索ではpushした順に近いほうから出てきてほしいから普通のVecDequeをつかう
+// ダイクストラ法では暫定距離が最低のものからpopしたい。push順ではなく。なので優先度付きキューbinaryheapを使う。
+// どちらのqueueにも次に行くノード情報を乗せる。入れた順番でそのまま取り出せるか、入れた値で判断しないといけないかの違い。
+// i32だとオーバーフローしてた。isizeで対応する。オーバーフローしてもREじゃなくてWAなので結果が分かりづらい。
+fn d() {
+    input! {
+        n:usize,
+        m:usize,
+        pos:[[isize;4];m]
+    }
+
+    let mut adjacent_list = vec![vec![]; n];
+    for pos_i in pos {
+        let array_a2b = [pos_i[1] - 1, pos_i[2], pos_i[3]];
+        adjacent_list[pos_i[0] as usize - 1].push(array_a2b);
+        let array_b2a = [pos_i[0] - 1, -pos_i[2], -pos_i[3]];
+        adjacent_list[pos_i[1] as usize - 1].push(array_b2a);
+    }
+
+    let mut kakutei = vec![false; n];
+    let mut cordinate = vec![[0, 0]; n];
+    let mut queue_destination = VecDeque::new();
+
+    cordinate[0] = [0, 0];
+    queue_destination.push_back(0);
+    kakutei[0] = true;
+    while queue_destination.len() > 0 {
+        let current_node = queue_destination.pop_front().unwrap();
+        let [current_x, current_y] = cordinate[current_node];
+
+        for &[next_node, next_x_diff, next_y_diff] in &adjacent_list[current_node] {
+            if kakutei[next_node as usize] == false {
+                cordinate[next_node as usize] = [current_x + next_x_diff, current_y + next_y_diff];
+                kakutei[next_node as usize] = true;
+                queue_destination.push_back(next_node as usize);
+            }
+        }
+    }
+
+    // 出力
+    for i in 0..n {
+        if kakutei[i] == false {
+            println!("undecidable");
+        } else {
+            println!("{} {}", cordinate[i][0], cordinate[i][1])
+        }
+    }
+    // println!("{:?}", cordinate);
+}
