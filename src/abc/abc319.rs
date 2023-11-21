@@ -101,3 +101,51 @@ fn c() {
     let probability = count_not_gakkari as f64 / all_trial as f64;
     println!("{}", probability);
 }
+// 二分探索と気づくのがムズイ
+// 単調増加関数だから二分探索で行けるらしい
+// 二分探索の境界の扱いはその都度考えないといけないっぽい、ムズイ
+// シミュレーションできる
+//　下限の設定がおかしかった、シミュレーションで全探索すると時間がかかりすぎる。
+fn d() {
+    input! {
+        n:usize,
+        m:usize,
+        l:[usize;n]
+    }
+
+    let mut num_sum_words = 0;
+    for num in &l {
+        num_sum_words += num;
+    }
+    let mut lower_width = *l.iter().max().unwrap(); // 少なくともwidthはこの値より大きい
+    let mut upper_width = num_sum_words + n - 1;
+    let mut width = (lower_width + upper_width) / 2;
+    loop {
+        //シミュレーションしてらいんのかずを数える
+        let mut sum_line: usize = l[0];
+        let mut num_lines: usize = 1;
+        for i in 1..n {
+            if sum_line + 1 + l[i] <= width {
+                //その行に単語追加
+                sum_line += 1 + l[i];
+            } else {
+                // 次の行にいってその単語を追加
+                sum_line = l[i];
+                num_lines += 1;
+            }
+        }
+
+        if num_lines > m {
+            lower_width = width + 1;
+        } else if num_lines < m {
+            upper_width = width;
+        } else if num_lines == m {
+            upper_width = width;
+        }
+        width = (lower_width + upper_width) / 2;
+        if width == lower_width && width == upper_width {
+            break;
+        }
+    }
+    println!("{}", width);
+}
