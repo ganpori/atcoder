@@ -22,10 +22,18 @@ fn a() {
     input! {
       n:usize,
     }
+
+    for i in 0..n {}
+
+    println!("{}", n);
 }
 
 // fn a() {
 //     input! {
 //       n:usize,
 //     }
+
+//     for i in 0..n {}
+
+//     println!("{}", n);
 // }
