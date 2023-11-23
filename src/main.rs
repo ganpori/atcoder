@@ -15,5 +15,28 @@ use proconio::input;
 // use proconio::marker::Chars;
 
 fn main() {
-    // a();
+    a();
+}
+
+fn a() {
+    input! {
+      n:usize,
+    }
+}
+
+fn b() {
+    input! {
+      n:usize,
+    }
+}
+
+fn c() {
+    input! {
+      n:usize,
+    }
+}
+fn d() {
+    input! {
+      n:usize,
+    }
 }
