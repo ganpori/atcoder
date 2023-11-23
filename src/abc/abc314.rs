@@ -53,3 +53,31 @@ fn b() {
         }
     }
 }
+
+// shiftはvecでrotate_rightもできる。その計算量はO(N)
+// vecdequeでpopとpushはどちらからでもO(1)
+// 最終的にpopしていくことが必要な事も考えると圧倒的にvecdequeのほうが良い
+fn c() {
+    input! {
+        n:usize,
+        m:usize,
+        s:Chars,
+        c:[usize;n]
+    }
+
+    let mut coler_set: Vec<VecDeque<char>> = vec![VecDeque::new(); m];
+    for i in 0..n {
+        coler_set[c[i] - 1].push_back(s[i]);
+    }
+
+    // println!("{:?}", coler_set);
+
+    for j in 0..m {
+        let back_char = coler_set[j].pop_back().unwrap();
+        coler_set[j].push_front(back_char);
+    }
+
+    for i in 0..n {
+        print!("{}", coler_set[c[i] - 1].pop_front().unwrap());
+    }
+}
