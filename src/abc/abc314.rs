@@ -81,3 +81,89 @@ fn c() {
         print!("{}", coler_set[c[i] - 1].pop_front().unwrap());
     }
 }
+
+// 今回は最後の操作とそのタイミングだけ覚えておけばよかった。
+// その他の場合を考慮しようとして全部のデータ扱ってたから遅くなった。
+// 最初の見極めが大事？全部のデータが必要な場合もある。
+fn d() {
+    input! {
+        n:usize,
+        s:Chars,
+        q:usize,
+    }
+
+    let mut is_x = vec![[0, 0]; n]; // 一つ目があるかないか、二つ目が何回目のqで交換されたか
+    let mut c = vec!['a'; n];
+    let mut t2 = vec![];
+    let mut t3 = vec![];
+    for i in 0..q {
+        input! {
+            tx_i:[usize;2],
+            c_i:char,
+        }
+        if tx_i[0] == 1 {
+            is_x[tx_i[1] - 1] = [1, i]; // 同じ個所書き換えられても最新だけわかればよい
+            c[tx_i[1] - 1] = c_i;
+        } else if tx_i[0] == 2 {
+            t2.push(i);
+        } else if tx_i[0] == 3 {
+            t3.push(i);
+        }
+    }
+    if t2.len() == 0 && t3.len() == 0 {
+        for i in 0..n {
+            if is_x[i][0] == 1 {
+                print!("{}", c[i]);
+            } else {
+                print!("{}", s[i]);
+            }
+        }
+    } else if t2.len() == 0 && t3.len() != 0 {
+        let index_last_t3 = t3[t3.len() - 1];
+        for i in 0..n {
+            if is_x[i][0] == 1 && is_x[i][1] > index_last_t3 {
+                print!("{}", c[i]);
+            } else if is_x[i][0] == 1 && is_x[i][1] < index_last_t3 {
+                print!("{}", c[i].to_uppercase());
+            } else {
+                print!("{}", s[i].to_uppercase());
+            }
+        }
+    } else if t2.len() != 0 && t3.len() == 0 {
+        let index_last_t2 = t2[t2.len() - 1];
+        for i in 0..n {
+            if is_x[i][0] == 1 && is_x[i][1] > index_last_t2 {
+                print!("{}", c[i]);
+            } else if is_x[i][0] == 1 && is_x[i][1] < index_last_t2 {
+                print!("{}", c[i].to_lowercase());
+            } else {
+                print!("{}", s[i].to_lowercase());
+            }
+        }
+    } else {
+        // t2,t3どちらも0じゃない
+        let index_last_t2 = t2[t2.len() - 1];
+        let index_last_t3 = t3[t3.len() - 1];
+        if index_last_t2 > index_last_t3 {
+            for i in 0..n {
+                if is_x[i][0] == 1 && is_x[i][1] > index_last_t2 {
+                    print!("{}", c[i]);
+                } else if is_x[i][0] == 1 && is_x[i][1] < index_last_t2 {
+                    print!("{}", c[i].to_lowercase());
+                } else {
+                    print!("{}", s[i].to_lowercase());
+                }
+            }
+        } else if index_last_t2 < index_last_t3 {
+            for i in 0..n {
+                if is_x[i][0] == 1 && is_x[i][1] > index_last_t3 {
+                    print!("{}", c[i]);
+                } else if is_x[i][0] == 1 && is_x[i][1] < index_last_t3 {
+                    print!("{}", c[i].to_uppercase());
+                } else {
+                    print!("{}", s[i].to_uppercase());
+                }
+            }
+        }
+    }
+}
