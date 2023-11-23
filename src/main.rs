@@ -24,19 +24,8 @@ fn a() {
     }
 }
 
-fn b() {
-    input! {
-      n:usize,
-    }
-}
-
-fn c() {
-    input! {
-      n:usize,
-    }
-}
-fn d() {
-    input! {
-      n:usize,
-    }
-}
+// fn a() {
+//     input! {
+//       n:usize,
+//     }
+// }
