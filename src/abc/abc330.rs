@@ -76,3 +76,36 @@ fn c() {
 
     println!("{}", min_abs);
 }
+
+// iproductで集合と集合の直積＝デカルト積がつくれる。
+// デカルト積使うと格子点を列挙するのが簡単。
+// iptableは二つの異なる集合で演算するので返り値は異なる型を混在できるtupleになる
+// tupleの要素は.0とか.1とかでとりだすから見た目悪い。
+// 結局自分以外の要素を行と列から一つずつ選んでくる場合の数に等しい。
+// あらかじめ行内と列内のoの数を数えておけば十分
+fn d() {
+    input! {
+      n:usize,
+      s:[Chars;n]
+    }
+
+    let mut set_same_col = HashMap::new();
+    let mut set_same_row = HashMap::new();
+    for (i, j) in iproduct!(0..n, 0..n) {
+        if s[i][j] == 'o' {
+            set_same_col.entry(i).or_insert(Vec::new()).push([i, j]);
+            set_same_row.entry(j).or_insert(Vec::new()).push([i, j]);
+        }
+    }
+    // dbg!(&set_same_col);
+    let mut count = 0;
+    for col_key in set_same_col.keys() {
+        for [i, j] in &set_same_col[col_key] {
+            // 共通のi,jが一つあって残りの二つを組み合わせる場合の数
+            count += (set_same_col[i].len() - 1) * (set_same_row[j].len() - 1);
+            //自分をのぞく-1
+        }
+    }
+
+    println!("{}", count);
+}
