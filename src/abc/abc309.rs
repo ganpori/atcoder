@@ -74,3 +74,58 @@ fn c() {
         }
     }
 }
+
+fn d() {
+    input! {
+      n1:usize,
+      n2:usize,
+      m:usize,
+      ab:[[usize;2];m]
+    }
+    // 二つのグラフの長さを足せばよい
+    let mut g = vec![Vec::new(); n1 + n2];
+    for i in 0..m {
+        g[ab[i][0] - 1].push(ab[i][1] - 1);
+        g[ab[i][1] - 1].push(ab[i][0] - 1);
+    }
+
+    let mut queue_node = VecDeque::new();
+
+    // 0から探索
+    let mut node = 0;
+    let mut dist = vec![-1; n1 + n2]; //distの値が訪問済みの判定にも使える
+    dist[node] = 0;
+    queue_node.push_back(node);
+    while queue_node.len() > 0 {
+        node = queue_node.pop_front().unwrap();
+        for next_node in &g[node] {
+            if dist[*next_node] == -1 {
+                queue_node.push_back(*next_node);
+                dist[*next_node] = dist[node] + 1;
+            } else {
+                continue;
+            }
+        }
+    }
+    let max_n1 = dist.iter().max().unwrap();
+
+    // n1+n2-1から探索
+    let mut node = n1 + n2 - 1;
+    let mut dist = vec![-1; n1 + n2]; //distの値が訪問済みの判定にも使える
+    dist[node] = 0;
+    queue_node.push_back(node);
+    while queue_node.len() > 0 {
+        node = queue_node.pop_front().unwrap();
+        for next_node in &g[node] {
+            if dist[*next_node] == -1 {
+                queue_node.push_back(*next_node);
+                dist[*next_node] = dist[node] + 1;
+            } else {
+                continue;
+            }
+        }
+    }
+    let max_n2 = dist.iter().max().unwrap();
+
+    println!("{}", max_n1 + max_n2 + 1);
+}
