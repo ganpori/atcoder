@@ -137,3 +137,34 @@ fn c() {
     }
     println!("No");
 }
+
+// O(n^2)になっちゃってた。一回のループで一つの()しか消さないから。
+// ループ中で削除していた'('の位置情報を全部保存しておいて、一回のループで都度消すようにすると早い。
+// '('の位置情報がそのまま今消すべきかの判断材料になる。要素数が0か、とかで。
+fn d() {
+    input! {
+      n:usize,
+      s:Chars,
+    }
+
+    let mut s_queue = VecDeque::from_iter(s);
+    let mut s_queue_new = VecDeque::with_capacity(s_queue.len());
+    let mut parentheses_index = vec![];
+    while s_queue.len() > 0 {
+        let left_char = s_queue.pop_front().unwrap();
+        s_queue_new.push_back(left_char);
+        let s_new_len_now = s_queue_new.len();
+        if left_char == '(' {
+            parentheses_index.push(s_new_len_now - 1);
+        } else if left_char == ')' {
+            if parentheses_index.len() != 0 {
+                let latest_parentheses_index = parentheses_index.pop().unwrap();
+                s_queue_new.drain(latest_parentheses_index..s_new_len_now);
+            }
+        }
+    }
+
+    for i in 0..s_queue_new.len() {
+        print!("{}", s_queue_new[i]);
+    }
+}
