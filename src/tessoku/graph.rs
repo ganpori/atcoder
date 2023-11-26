@@ -58,6 +58,10 @@ fn dfs(pos: usize, vec_visited: &mut Vec<bool>, adjacency_list: &Vec<Vec<usize>>
     }
 }
 
+
+
+// 幅優先探索の時はqueueにpushすると同時にvisitedを更新しないと無駄にqueueにたまっていく
+// 無駄にたまるので計算時間とメモリ量爆増する。
 pub fn a63() {
     use std::collections::VecDeque;
     input! {
