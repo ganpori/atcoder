@@ -109,3 +109,41 @@ fn e() {
         println!("{}", max_level);
     }
 }
+
+//　対角との内積で判定できるのでは？という考察が間違い
+//  二次元平面の角度でも、三次元目を0として扱うことで外積を考えることが可能
+// 外積の演算をしてできたベクトルがz軸でどっちの向きかでなす角が180以上か判定可能。
+// ただし角度は反時計回りにはかるものとする。
+// a_vecとb_vecがあったらax*by-ay*bx>0なら180未満
+fn f() {
+    input! {
+      abcd:[[isize;2];4]
+    }
+
+    // ab,ad,bc,ba,cd,cb,da,dc
+    let mut vec_edge = [
+        [abcd[1][0] - abcd[0][0], abcd[1][1] - abcd[0][1]], // ab
+        [abcd[3][0] - abcd[0][0], abcd[3][1] - abcd[0][1]], // ad
+        [abcd[2][0] - abcd[1][0], abcd[2][1] - abcd[1][1]], // bc
+        [abcd[0][0] - abcd[1][0], abcd[0][1] - abcd[1][1]], // ba
+        [abcd[3][0] - abcd[2][0], abcd[3][1] - abcd[2][1]], // cd
+        [abcd[1][0] - abcd[2][0], abcd[1][1] - abcd[2][1]], // cb
+        [abcd[0][0] - abcd[3][0], abcd[0][1] - abcd[3][1]], //da
+        [abcd[2][0] - abcd[3][0], abcd[2][1] - abcd[3][1]], // dc
+    ];
+
+    let mut outer_product_z = [0; 4];
+
+    outer_product_z[0] = vec_edge[0][0] * vec_edge[1][1] - vec_edge[0][1] * vec_edge[1][0];
+    outer_product_z[1] = vec_edge[2][0] * vec_edge[3][1] - vec_edge[2][1] * vec_edge[3][0];
+    outer_product_z[2] = vec_edge[4][0] * vec_edge[5][1] - vec_edge[4][1] * vec_edge[5][0];
+    outer_product_z[3] = vec_edge[6][0] * vec_edge[7][1] - vec_edge[6][1] * vec_edge[7][0];
+
+    for i in 0..4 {
+        if outer_product_z[i] < 0 {
+            print!("No");
+            return;
+        }
+    }
+    print!("Yes");
+}
