@@ -37,3 +37,9 @@ fn a() {
 
 //     println!("{}", n);
 // }
+
+// ファイルから文字を読み込む
+// let string = std::fs::read_to_string("random_01.txt").unwrap();
+// let mut s = vec![];
+// for c in string.chars() {
+//     s.push(c);
