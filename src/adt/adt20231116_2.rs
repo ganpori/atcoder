@@ -147,3 +147,45 @@ fn f() {
     }
     print!("Yes");
 }
+
+// 組み合わせて余りがちょうどや～以下の時にdpが使いやすい。
+//　何もわかってないが特に気にしない。
+// 三次元の動的計画法らしい。わからんから模写する。
+//dp_ijkからj個aが選ばれて総和をDで割った余りがkであるようなときの総和の最大値。
+// &usizeはiteratorトレイトを実装していない。
+// sumはiteratorトレイトを実装した方に対して提供されている。
+// mapを使って要素をデリファレンスする必要がある
+fn g() {
+    input! {
+        n:usize,
+        K:usize,
+        d:usize,
+        a:[usize;n]
+    }
+
+    let mut dp: Vec<Vec<Vec<isize>>> = vec![vec![vec![-1; d]; K + 1]; n + 1];
+    dp[0][0][0] = 0;
+
+    for i in 0..n {
+        for j in 0..=K {
+            // =Kであることに注意
+            for k in 0..d {
+                if dp[i][j][k] == -1 {
+                    continue;
+                    //　なんで無視するの？
+                }
+                // a_iを選ばない場合の遷移
+                dp[i + 1][j][k] = std::cmp::max(dp[i + 1][j][k], dp[i][j][k]);
+
+                // a_iを選ぶ場合の遷移
+                if j != K {
+                    dp[i + 1][j + 1][(k + a[i]) % d] = std::cmp::max(
+                        dp[i + 1][j + 1][(k + a[i]) % d],
+                        dp[i][j][k] + a[i] as isize,
+                    );
+                }
+            }
+        }
+    }
+    println!("{}", dp[n][K][0]);
+}
