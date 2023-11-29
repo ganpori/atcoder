@@ -11,8 +11,8 @@
 // mod tessoku;
 // https://atcoder.jp/contests/tessoku-book
 
-use proconio::input;
-// use proconio::marker::Chars;
+#[allow(unused)]
+use proconio::{input, marker::Chars};
 
 fn main() {
     a();
