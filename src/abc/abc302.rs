@@ -1,3 +1,15 @@
+fn a() {
+    input! {
+        a:usize,
+        b:usize
+    }
+    let mut val = a / b;
+    if a % b != 0 {
+        val += 1;
+    }
+    println!("{}", val);
+}
+
 // absをつけないで片側からまず抑える。その後別のifで逆方向から抑える。
 //　引き算判定は足し算に置き換えて値の範囲が辺にならないように調整
 fn d() {
