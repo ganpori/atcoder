@@ -55,6 +55,41 @@ fn b() {
     }
 }
 
+fn c() {
+    input! {
+        n:usize,
+        m:usize,
+        s:[Chars;n]
+    }
+    let mut dist_map = HashMap::new();
+    for mut comb in (0..n).combinations(2) {
+        comb.sort();
+        let mut dist = 0;
+        for i in 0..m {
+            if s[comb[0]][i] != s[comb[1]][i] {
+                dist += 1
+            }
+        }
+        dist_map.insert(comb, dist);
+    }
+
+    for perm in (0..n).permutations(n) {
+        let mut ok = true;
+        for i in 0..n - 1 {
+            let mut comb = vec![perm[i], perm[i + 1]];
+            comb.sort();
+            if dist_map[&comb] != 1 {
+                ok = false;
+            }
+        }
+        if ok {
+            print!("Yes");
+            return;
+        }
+    }
+    print!("No");
+}
+
 // absをつけないで片側からまず抑える。その後別のifで逆方向から抑える。
 //　引き算判定は足し算に置き換えて値の範囲が辺にならないように調整
 fn d() {
