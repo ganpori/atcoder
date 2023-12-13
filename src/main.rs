@@ -22,20 +22,24 @@ fn a() {
     input! {
       n:usize,
     }
-
-    for i in 0..n {}
-
-    println!("{}", n);
 }
 
-// fn a() {
+// fn b() {
 //     input! {
 //       n:usize,
 //     }
+// }
 
-//     for i in 0..n {}
+// fn c() {
+//     input! {
+//       n:usize,
+//     }
+// }
 
-//     println!("{}", n);
+// fn d() {
+//     input! {
+//       n:usize,
+//     }
 // }
 
 // ファイルから文字を読み込む
