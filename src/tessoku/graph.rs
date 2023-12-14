@@ -152,3 +152,82 @@ fn a64() {
         }
     }
 }
+
+
+// unionfind
+fn b() {
+    input! {
+      n:usize,
+      q:usize,
+    }
+
+    let mut uf = UnionFind::new(n);
+
+    for _ in 0..q {
+        input! {
+            p:usize,
+            a:usize,
+            b:usize
+        }
+
+        if p == 0 {
+            uf.unite(a, b);
+        } else {
+            if uf.is_same(a, b) {
+                println!("Yes");
+            } else {
+                println!("No");
+            }
+        }
+    }
+}
+
+pub struct UnionFind {
+    par: Vec<isize>,
+    siz: Vec<usize>,
+}
+
+impl UnionFind {
+    pub fn new(n: usize) -> Self {
+        Self {
+            par: vec![-1; n],
+            siz: vec![1; n],
+        }
+    }
+
+    pub fn root(&mut self, x: usize) -> usize {
+        if self.par[x] == -1 {
+            return x;
+        } else {
+            self.par[x] = self.root(self.par[x] as usize) as isize;
+            return self.par[x] as usize;
+        }
+    }
+
+    pub fn is_same(&mut self, x: usize, y: usize) -> bool {
+        self.root(x) == self.root(y)
+    }
+
+    pub fn unite(&mut self, x: usize, y: usize) -> bool {
+        let mut x = self.root(x);
+        let mut y = self.root(y);
+
+        if x == y {
+            return false;
+        }
+
+        if self.siz[x] < self.siz[y] {
+            let tmp = y;
+            y = x;
+            x = tmp;
+        }
+        self.par[y] = x as isize;
+        self.siz[x] += self.siz[y];
+
+        return true;
+    }
+    pub fn size(&mut self, x: usize) -> usize {
+        let r = self.root(x);
+        return self.siz[r as usize];
+    }
+}
