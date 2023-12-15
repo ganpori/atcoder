@@ -76,25 +76,53 @@ def _calc(s, m):
     return num_buy
 
 
+def list2tuple(l):
+    t = tuple(tuple(target) for target in l)
+    return t
+
+
+# 交換を行き来可能なノードとみることが可能。
+# 盤面の状態そのものをposと置き換えてみる
+# distの管理にmapを用いる。mapのkeyにtupleを適用
 def d():
+    import copy
+    from collections import deque
+
     h, w = map(int, input().split())
 
     a = [input().split() for _ in range(h)]
     b = [input().split() for _ in range(h)]
-    print(a)
-    print(b)
 
-    set_a_row = set()
-    set_b_row = set()
-    set_a_col = set()
-    set_b_col = set()
-
-    for i in range(h):
-        set_a_row.add(a[i])
-        set_b_row.add(set(b[i]))
-
-    print(set_a_row)
-    print(set_b_row)
+    q = deque()
+    q.append(a)
+    dist = {list2tuple(a): 0}
+    while len(q) > 0:
+        status = q.popleft()
+        tuple_status = list2tuple(status)
+        for i in range(h - 1):
+            next_status = copy.deepcopy(status)
+            next_status[i], next_status[i + 1] = next_status[i + 1], next_status[i]
+            tuple_next = list2tuple(next_status)
+            if tuple_next in dist.keys():
+                continue
+            else:
+                q.append(next_status)
+                dist[tuple_next] = dist[tuple_status] + 1
+        for j in range(w - 1):
+            next_status = copy.deepcopy(status)
+            for i in range(h):
+                next_status[i][j], next_status[i][j + 1] = (
+                    next_status[i][j + 1],
+                    next_status[i][j],
+                )
+            tuple_next = list2tuple(next_status)
+            if tuple_next not in dist:
+                q.append(next_status)
+                dist[tuple_next] = dist[tuple_status] + 1
+    if list2tuple(b) in dist:
+        print(dist[list2tuple(b)])
+    else:
+        print(-1)
     return
 
 
