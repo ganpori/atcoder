@@ -91,3 +91,37 @@ fn b17() {
         print!("{} ", trajectory[i]);
     }
 }
+
+// 横が獲得点数、縦がどのカードを使うか
+// dpの中身は使う使わないのbool
+// 獲得点数が0,使うカード枚数が0の行と列を一つずつ追加すると見通しが立つ
+// 使える枚数は一つなんだから同じ行を参照してはいけない
+fn a18() {
+    input! {
+      n:usize,
+      s:usize,
+      a:[usize;n]
+    }
+
+    let mut dp = vec![vec![false; s + 1]; n + 1];
+    dp[0][0] = true;
+    for i in 1..n + 1 {
+        for j in 0..s + 1 {
+            if dp[i - 1][j] {
+                dp[i][j] = true;
+            }
+            if a[i - 1] <= j {
+                let target_j = j - a[i - 1];
+                if dp[i - 1][target_j] {
+                    dp[i][j] = true;
+                }
+            }
+        }
+    }
+    if dp[n][s] {
+        println!("Yes");
+    } else {
+        println!("No");
+    }
+    // dbg!(&dp);
+}
