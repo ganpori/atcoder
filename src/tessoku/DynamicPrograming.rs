@@ -54,3 +54,40 @@ fn a17() {
         print!("{} ", trajectory[trajectory.len() - 1 - i]);
     }
 }
+
+fn b17() {
+    input! {
+      n:usize,
+      h:[isize;n],
+
+    }
+    let mut dp = vec![100 * 100_000 + 1; n];
+    dp[0] = 0;
+    dp[1] = (h[1] - h[0]).abs();
+    for i in 2..n {
+        dp[i] = std::cmp::min(
+            dp[i - 1] + (h[i] - h[i - 1]).abs(),
+            dp[i - 2] + (h[i] - h[i - 2]).abs(),
+        );
+    }
+
+    let mut trajectory: Vec<usize> = vec![];
+    let mut pos = n - 1;
+    trajectory.push(pos + 1);
+    while pos > 1 {
+        if dp[pos] == dp[pos - 1] + (h[pos - 1] - h[pos]).abs() {
+            pos -= 1;
+        } else {
+            pos -= 2;
+        }
+        trajectory.push(pos + 1);
+    }
+    if pos == 1 {
+        trajectory.push(1);
+    }
+    trajectory.sort();
+    println!("{}", trajectory.len());
+    for i in 0..trajectory.len() {
+        print!("{} ", trajectory[i]);
+    }
+}
