@@ -94,3 +94,43 @@ fn dfs(
         }
     }
 }
+
+fn d() {
+    input! {
+      n:usize,
+      xyz:[[usize;3];n]
+    }
+
+    let mut people_need: Vec<_> = vec![0; n];
+    for i in 0..n {
+        if xyz[i][0] < xyz[i][1] {
+            people_need[i] = (xyz[i][0] + xyz[i][1]) / 2 + 1 - xyz[i][0];
+        }
+    }
+
+    let z_sum: usize = xyz.iter().map(|x| x[2]).sum();
+    let z_need: usize = z_sum / 2 + 1;
+    let max_people = 100 * 1000_000_000 + 1;
+    let mut dp: Vec<Vec<isize>> = vec![vec![max_people; z_sum + 1]; n + 1];
+    dp[0][0] = 0;
+    let mut sum_people = max_people;
+    for i in 1..n + 1 {
+        for j in 0..z_sum + 1 {
+            let zi = xyz[i - 1][2];
+            if dp[i - 1][j] != max_people {
+                dp[i][j] = dp[i - 1][j]
+            }
+            if j >= zi {
+                if dp[i - 1][j - zi] != max_people {
+                    dp[i][j] =
+                        std::cmp::min(dp[i][j], dp[i - 1][j - zi] + people_need[i - 1] as isize);
+                }
+            }
+            if dp[i][j] != max_people && j >= z_need {
+                sum_people = std::cmp::min(sum_people, dp[i][j]);
+            }
+        }
+    }
+    // dbg!(&dp, &z_sum);
+    print!("{}", sum_people);
+}
