@@ -180,52 +180,73 @@ fn a63() {
     }
 }
 
+fn a66() {
+    input! {
+      n:usize,
+      q:usize,
+    }
+    let mut uf = UnionFind::new(n);
+    for _ in 0..q {
+        input! {
+            type_query:usize,
+            u:usize,
+            v:usize
+        }
+        if type_query == 1 {
+            uf.unite(u - 1, v - 1);
+        } else if type_query == 2 {
+            let answer = uf.is_same(u - 1, v - 1);
+            if answer {
+                println!("Yes");
+            } else {
+                println!("No");
+            }
+        }
+    }
+}
+
 struct UnionFind {
-    par: Vec<isize>,
-    siz: Vec<usize>,
+    size: Vec<usize>,
+    parent: Vec<usize>,
 }
 
 impl UnionFind {
     fn new(n: usize) -> Self {
         Self {
-            par: vec![-1; n],
-            siz: vec![1; n],
+            size: vec![1; n],
+            parent: vec![n; n],
         }
     }
 
     fn root(&self, x: usize) -> usize {
-        if self.par[x] == -1 {
-            return x;
+        let mut parent_x = self.parent[x];
+        if parent_x != self.parent.len() {
+            parent_x = self.root(parent_x);
+            return parent_x;
+        }
+        return x;
+    }
+    fn is_same(&self, x: usize, y: usize) -> bool {
+        let root_x = self.root(x);
+        let root_y = self.root(y);
+        if root_x == root_y {
+            true
         } else {
-            self.par[x] = self.root(self.par[x] as usize) as isize;
-            return self.par[x] as usize;
+            false
         }
     }
-
-    fn is_same(&mut self, x: usize, y: usize) -> bool {
-        self.root(x) == self.root(y)
-    }
-
-    fn unite(&mut self, x: usize, y: usize) -> bool {
-        let mut x = self.root(x);
-        let mut y = self.root(y);
-
-        if x == y {
-            return false;
+    fn unite(&mut self, x: usize, y: usize) {
+        let root_x = self.root(x);
+        let root_y = self.root(y);
+        if root_x == root_y {
+            return;
         }
-
-        if self.siz[x] < self.siz[y] {
-            let tmp = y;
-            y = x;
-            x = tmp;
+        if self.size[root_x] < self.size[root_y] {
+            self.parent[root_x] = root_y;
+            self.size[root_y] += self.size[root_x];
+        } else {
+            self.parent[root_y] = root_x;
+            self.size[root_x] += self.size[root_y];
         }
-        self.par[y] = x as isize;
-        self.siz[x] += self.siz[y];
-
-        return true;
-    }
-    fn size(&mut self, x: usize) -> usize {
-        let r = self.root(x);
-        return self.siz[r as usize];
     }
 }
