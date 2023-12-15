@@ -125,3 +125,50 @@ fn a18() {
     }
     // dbg!(&dp);
 }
+
+fn b18() {
+    input! {
+      n:usize,
+      s:usize,
+      a:[usize;n]
+    }
+
+    let mut dp = vec![vec![false; s + 1]; n + 1];
+    dp[0][0] = true;
+    for i in 1..n + 1 {
+        for j in 0..s + 1 {
+            if dp[i - 1][j] {
+                dp[i][j] = true;
+            }
+            if a[i - 1] <= j {
+                let target_j = j - a[i - 1];
+                if dp[i - 1][target_j] {
+                    dp[i][j] = true;
+                }
+            }
+        }
+    }
+    if dp[n][s] {
+        // println!("Yes");
+        let mut trajectory: Vec<usize> = vec![];
+        let mut card = n;
+        let mut value = s;
+        while value > 0 {
+            if value >= a[card - 1] {
+                if dp[card - 1][value - a[card - 1]] {
+                    trajectory.push(card);
+                    value -= a[card - 1];
+                }
+            }
+            card -= 1;
+        }
+        println!("{}", trajectory.len());
+        trajectory.sort();
+        for card in trajectory {
+            print!("{} ", card);
+        }
+    } else {
+        println!("-1");
+    }
+    // dbg!(&dp);
+}
