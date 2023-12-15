@@ -172,3 +172,34 @@ fn b18() {
     }
     // dbg!(&dp);
 }
+
+fn a19() {
+    input! {
+      n:usize,
+      w:usize,
+      wv:[[usize;2];n]
+    }
+    let mut dp: Vec<Vec<isize>> = vec![vec![-1; w + 1]; n + 1];
+    dp[0][0] = 0;
+    let mut max_value = 0;
+    for i in 1..n + 1 {
+        for j in 0..w + 1 {
+            let weight_target = wv[i - 1][0];
+            let value_target = wv[i - 1][1];
+            if dp[i - 1][j] != -1 {
+                dp[i][j] = dp[i - 1][j];
+            }
+            if j >= weight_target {
+                if dp[i - 1][j - weight_target] != -1 {
+                    dp[i][j] = std::cmp::max(
+                        dp[i][j],
+                        dp[i - 1][j - weight_target] + value_target as isize,
+                    );
+                }
+            }
+            max_value = std::cmp::max(max_value, dp[i][j]);
+        }
+    }
+    // dbg!(&dp);
+    println!("{}", max_value);
+}
