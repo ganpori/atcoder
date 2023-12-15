@@ -1,6 +1,6 @@
 use proconio::input;
 
-pub fn a61() {
+fn a61() {
     input! {
         n:usize,
         m:usize,
@@ -24,7 +24,7 @@ pub fn a61() {
     }
 }
 
-pub fn a62() {
+fn a62() {
     input! {
         n:usize,
         m:usize,
@@ -58,11 +58,9 @@ fn dfs(pos: usize, vec_visited: &mut Vec<bool>, adjacency_list: &Vec<Vec<usize>>
     }
 }
 
-
-
 // 幅優先探索の時はqueueにpushすると同時にvisitedを更新しないと無駄にqueueにたまっていく
 // 無駄にたまるので計算時間とメモリ量爆増する。
-pub fn a63() {
+fn a63() {
     use std::collections::VecDeque;
     input! {
         n:usize,
@@ -93,109 +91,109 @@ pub fn a63() {
     for val in dist.iter() {
         println!("{}", val);
     }
-    
-// ダイクストラ法で距離付きのグラフを解く
-// 幅優先探索と考え方は同じ。
-// スタート位置からの距離を暫定距離を使って更新していく。
-// 明らかな最小距離のノードから暫定距離を真の距離に確定させていく。
-// 明らかな最小距離のノードを効率よく選ぶためにpriority queueを使う。
-fn a64() {
-    use std::collections::BinaryHeap;
 
-    input! {
-        n:usize,
-        m:usize,
-        vec_edge:[[usize;3];m]
-    }
+    // ダイクストラ法で距離付きのグラフを解く
+    // 幅優先探索と考え方は同じ。
+    // スタート位置からの距離を暫定距離を使って更新していく。
+    // 明らかな最小距離のノードから暫定距離を真の距離に確定させていく。
+    // 明らかな最小距離のノードを効率よく選ぶためにpriority queueを使う。
+    fn a64() {
+        use std::collections::BinaryHeap;
 
-    let max_dist: usize = m * 10_001;
-    let mut adjacent_list = vec![vec![]; n];
-    for i in 0..m {
-        let a2b_array = [vec_edge[i][1] - 1, vec_edge[i][2]];
-        adjacent_list[vec_edge[i][0] - 1].push(a2b_array);
-        let b2a_array = [vec_edge[i][0] - 1, vec_edge[i][2]];
-        adjacent_list[vec_edge[i][1] - 1].push(b2a_array);
-    }
-    // println!("{:?}", adjacent_list);
-
-    let mut kakutei = vec![false; n];
-    let mut current_dist = vec![max_dist; n];
-
-    let mut queue = BinaryHeap::new();
-    current_dist[0] = 0;
-    queue.push([-1 * current_dist[0] as i32, 0]); //値の大きいものから取り出されるので-1しておく。中身がvecならvecの一番左を参照されるっぽい
-    while queue.len() > 0 {
-        // 次に確定する頂点posを決める
-        let [_, pos] = queue.pop().unwrap();
-
-        if kakutei[pos as usize] == true {
-            continue; // posへの辺が何個もあるがすでにposへの最小のdistが定まっている場合
-        }
-
-        //posと隣接する頂点のcurrentの値を更新
-        kakutei[pos as usize] = true;
-        for [next_node, weight] in &adjacent_list[pos as usize] {
-            current_dist[*next_node] = std::cmp::min(
-                current_dist[pos as usize] + *weight,
-                current_dist[*next_node],
-            );
-            if kakutei[*next_node] == false {
-                queue.push([-1 * current_dist[*next_node] as i32, *next_node as i32]);
-            }
-        }
-    }
-    for i in 0..n {
-        if current_dist[i] != max_dist {
-            println!("{}", current_dist[i]);
-        } else {
-            println!("-1");
-        }
-    }
-}
-
-
-// unionfind
-fn b() {
-    input! {
-      n:usize,
-      q:usize,
-    }
-
-    let mut uf = UnionFind::new(n);
-
-    for _ in 0..q {
         input! {
-            p:usize,
-            a:usize,
-            b:usize
+            n:usize,
+            m:usize,
+            vec_edge:[[usize;3];m]
         }
 
-        if p == 0 {
-            uf.unite(a, b);
-        } else {
-            if uf.is_same(a, b) {
-                println!("Yes");
+        let max_dist: usize = m * 10_001;
+        let mut adjacent_list = vec![vec![]; n];
+        for i in 0..m {
+            let a2b_array = [vec_edge[i][1] - 1, vec_edge[i][2]];
+            adjacent_list[vec_edge[i][0] - 1].push(a2b_array);
+            let b2a_array = [vec_edge[i][0] - 1, vec_edge[i][2]];
+            adjacent_list[vec_edge[i][1] - 1].push(b2a_array);
+        }
+        // println!("{:?}", adjacent_list);
+
+        let mut kakutei = vec![false; n];
+        let mut current_dist = vec![max_dist; n];
+
+        let mut queue = BinaryHeap::new();
+        current_dist[0] = 0;
+        queue.push([-1 * current_dist[0] as i32, 0]); //値の大きいものから取り出されるので-1しておく。中身がvecならvecの一番左を参照されるっぽい
+        while queue.len() > 0 {
+            // 次に確定する頂点posを決める
+            let [_, pos] = queue.pop().unwrap();
+
+            if kakutei[pos as usize] == true {
+                continue; // posへの辺が何個もあるがすでにposへの最小のdistが定まっている場合
+            }
+
+            //posと隣接する頂点のcurrentの値を更新
+            kakutei[pos as usize] = true;
+            for [next_node, weight] in &adjacent_list[pos as usize] {
+                current_dist[*next_node] = std::cmp::min(
+                    current_dist[pos as usize] + *weight,
+                    current_dist[*next_node],
+                );
+                if kakutei[*next_node] == false {
+                    queue.push([-1 * current_dist[*next_node] as i32, *next_node as i32]);
+                }
+            }
+        }
+        for i in 0..n {
+            if current_dist[i] != max_dist {
+                println!("{}", current_dist[i]);
             } else {
-                println!("No");
+                println!("-1");
+            }
+        }
+    }
+
+    // unionfind
+    fn b() {
+        input! {
+          n:usize,
+          q:usize,
+        }
+
+        let mut uf = UnionFind::new(n);
+
+        for _ in 0..q {
+            input! {
+                p:usize,
+                a:usize,
+                b:usize
+            }
+
+            if p == 0 {
+                uf.unite(a, b);
+            } else {
+                if uf.is_same(a, b) {
+                    println!("Yes");
+                } else {
+                    println!("No");
+                }
             }
         }
     }
 }
 
-pub struct UnionFind {
+struct UnionFind {
     par: Vec<isize>,
     siz: Vec<usize>,
 }
 
 impl UnionFind {
-    pub fn new(n: usize) -> Self {
+    fn new(n: usize) -> Self {
         Self {
             par: vec![-1; n],
             siz: vec![1; n],
         }
     }
 
-    pub fn root(&mut self, x: usize) -> usize {
+    fn root(&self, x: usize) -> usize {
         if self.par[x] == -1 {
             return x;
         } else {
@@ -204,11 +202,11 @@ impl UnionFind {
         }
     }
 
-    pub fn is_same(&mut self, x: usize, y: usize) -> bool {
+    fn is_same(&mut self, x: usize, y: usize) -> bool {
         self.root(x) == self.root(y)
     }
 
-    pub fn unite(&mut self, x: usize, y: usize) -> bool {
+    fn unite(&mut self, x: usize, y: usize) -> bool {
         let mut x = self.root(x);
         let mut y = self.root(y);
 
@@ -226,7 +224,7 @@ impl UnionFind {
 
         return true;
     }
-    pub fn size(&mut self, x: usize) -> usize {
+    fn size(&mut self, x: usize) -> usize {
         let r = self.root(x);
         return self.siz[r as usize];
     }
