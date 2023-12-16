@@ -50,6 +50,27 @@ fn b() {
     }
 }
 
+// charを as isizeとかで数値に変換して数値の距離で判定
+fn bb() {
+    input! {
+      mut s:Chars,
+      mut t:Chars
+    }
+    s.sort();
+    t.sort();
+
+    let s_int = s[1] as usize - s[0] as usize;
+    let t_int = t[1] as usize - t[0] as usize;
+
+    if (s_int == 1 || s_int == 4) && (t_int == 1 || t_int == 4) {
+        println!("Yes");
+    } else if (s_int == 2 || s_int == 3) && (t_int == 2 || t_int == 3) {
+        println!("Yes");
+    } else {
+        println!("No");
+    }
+}
+
 // 問題読まずに時間ロスした。
 // 先ずは例をちゃんと確認する。
 fn c() {
@@ -71,6 +92,29 @@ fn c() {
         11_111_111_111,
         111_111_111_111,
     ];
+    let mut sum: Vec<usize> = vec![];
+    for c in memo.iter().combinations_with_replacement(3) {
+        sum.push(c.into_iter().sum());
+    }
+    sum.sort();
+    println!("{}", sum[n - 1]);
+}
+
+// stringにpushしてからparseすると簡単。
+// pushしなくてもformatで結合してもよい。
+fn cc() {
+    input! {
+      n:usize,
+    }
+
+    let mut memo: Vec<usize> = vec![];
+    for i in 0..13 {
+        let mut sl = "1".to_string();
+        for _ in 0..i {
+            sl.push('1');
+        }
+        memo.push(sl.parse().unwrap());
+    }
     let mut sum: Vec<usize> = vec![];
     for c in memo.iter().combinations_with_replacement(3) {
         sum.push(c.into_iter().sum());
