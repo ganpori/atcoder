@@ -205,6 +205,9 @@ fn a66() {
     }
 }
 
+// #[derive(Debug)]のアトリビュートはdebugトレイトの自動実装を行うらしい。
+// これでdbg!(&uf); println!("{:?}", uf);どちらも可能になる。
+#[derive(Debug)]
 struct UnionFind {
     size: Vec<usize>,
     parent: Vec<usize>,
