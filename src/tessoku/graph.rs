@@ -211,6 +211,7 @@ fn a66() {
 struct UnionFind {
     size: Vec<usize>,
     parent: Vec<usize>,
+    root_status: Vec<usize>,
 }
 
 impl UnionFind {
@@ -218,20 +219,23 @@ impl UnionFind {
         Self {
             size: vec![1; n],
             parent: vec![n; n],
+            root_status: (0..n).into_iter().collect(),
         }
     }
 
-    fn root(&self, x: usize) -> usize {
+    fn root(&mut self, x: usize) -> usize {
         let mut parent_x = self.parent[x];
         if parent_x != self.parent.len() {
             parent_x = self.root(parent_x);
+            self.root_status[x] = parent_x;
             return parent_x;
         }
+
         return x;
     }
     fn is_same(&self, x: usize, y: usize) -> bool {
-        let root_x = self.root(x);
-        let root_y = self.root(y);
+        let root_x = self.root_status[x];
+        let root_y = self.root_status[y];
         if root_x == root_y {
             true
         } else {
@@ -251,5 +255,18 @@ impl UnionFind {
             self.parent[root_y] = root_x;
             self.size[root_x] += self.size[root_y];
         }
+    }
+    fn get_root_size_vec(&self) -> Vec<[usize; 2]> {
+        // 呼び出すタイミングによってvecのサイズが変わるのでめっちゃ不安定な挙動する。
+        // root_size_vecに所有権は移動していないっぽい
+        //　一要素目が根、２要素目が根のサイズを表す。
+        // hasumapを返すと受け手側でもhashmapを使わないといけないからデフォルトで使いやすいvecにする。
+        let mut root_size_vec = vec![];
+        for i in 0..self.parent.len() {
+            if self.parent[i] == self.parent.len() {
+                root_size_vec.push([i, self.size[i]]);
+            }
+        }
+        return root_size_vec;
     }
 }
