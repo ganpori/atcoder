@@ -27,3 +27,24 @@ fn b() {
         }
     }
 }
+
+fn c() {
+    input! {
+        n:usize,
+        x:isize,
+        mut a:[isize;n]
+    }
+    a.sort();
+    let mut j: usize = 0;
+    for i in 0..n {
+        while a[j] - a[i] < x && j < n - 1 {
+            j += 1;
+        }
+        let diff = a[j] - a[i];
+        if diff == x {
+            println!("Yes");
+            return;
+        }
+    }
+    println!("No");
+}
