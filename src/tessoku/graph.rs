@@ -218,8 +218,8 @@ impl UnionFind {
     fn new(n: usize) -> Self {
         Self {
             size: vec![1; n],
-            parent: vec![n; n],
-            root_status: (0..n).into_iter().collect(),
+            parent: vec![n; n], // 点数はn。parentの値はparentのノードのindexを表す.->0..=n-1しか存在しない。nであるときは自分自身がrootであることを示す。
+            root_status: (0..n).into_iter().collect(), //この変数の型は?
         }
     }
 
@@ -250,9 +250,11 @@ impl UnionFind {
         }
         if self.size[root_x] < self.size[root_y] {
             self.parent[root_x] = root_y;
+            self.root_status[x] = self.root_status[y];
             self.size[root_y] += self.size[root_x];
         } else {
             self.parent[root_y] = root_x;
+            self.root_status[y] = self.root_status[x];
             self.size[root_x] += self.size[root_y];
         }
     }
