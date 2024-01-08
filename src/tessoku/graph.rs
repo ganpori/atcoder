@@ -219,6 +219,7 @@ impl UnionFind {
         Self {
             size: vec![1; n],
             parent: vec![n; n], // 点数はn。parentの値はparentのノードのindexを表す.->0..=n-1しか存在しない。nであるときは自分自身がrootであることを示す。
+            // root_statusになんかバグあるのでつかわない。いつか直す。rootをとりあえず使う。
             root_status: (0..n).into_iter().collect(), //この変数の型は?
         }
     }
