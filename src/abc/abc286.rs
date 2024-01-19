@@ -1,3 +1,27 @@
+
+fn a() {
+    input! {
+      n:usize,
+      p:usize,
+      q:usize,
+      r:usize,
+      s:usize,
+      a:[usize;n]
+    }
+
+    for i in 0..n{
+      if p<=i+1 && i+1<=q{ 
+      print!("{} ",a[r+i-p]);
+    }
+    else if r<=i+1 && i+1<=s{
+      print!("{} ",a[p+i-r]);
+    }
+    
+    else{
+      print!("{} ",a[i]);
+    }
+}}
+
 fn c() {
     input! {
       n:usize,
