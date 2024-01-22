@@ -4,4 +4,8 @@
     },
     "python.formatting.provider": "none",
     "editor.formatOnSave": true,
+    "rust-analyzer.linkedProjects": [
+        ".\\Cargo.toml",
+        ".\\src\\abc\\abc282\\Cargo.toml"
+    ],
 }
