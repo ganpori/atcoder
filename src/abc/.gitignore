@@ -1,2 +1,5 @@
 # buildしたものは管理しないようにする
 target
+Cargo.lock
+Cargo.toml
+testcases
