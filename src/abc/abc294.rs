@@ -64,3 +64,44 @@ fn c() {
         print!("{} ", bb[i]);
     }
 }
+
+fn d() {
+    input! {
+      n:usize,
+      q:usize
+    }
+
+    let mut queue_not_called: VecDeque<usize> = (1..=n).into_iter().collect();
+    let mut set_called: HashSet<usize> = HashSet::new();
+    let mut queue_called = BinaryHeap::new();
+
+    for _ in 0..q {
+        // dbg!(&queue_not_called, &queue_called, &set_called);
+        // dbg!(&queue_called);
+        input! {
+          status:usize
+        }
+
+        if status == 1 {
+            let person = queue_not_called.pop_front().unwrap();
+            set_called.insert(person);
+            queue_called.push(std::cmp::Reverse(person));
+        } else if status == 2 {
+            input! {
+              x:usize
+            }
+            set_called.remove(&x);
+        } else if status == 3 {
+            let mut not_called = true;
+            while not_called {
+                let person = queue_called.pop().unwrap().0;
+
+                if set_called.contains(&person) {
+                    not_called = false;
+                    print!("{} ", person);
+                    queue_called.push(std::cmp::Reverse(person));
+                }
+            }
+        }
+    }
+}
